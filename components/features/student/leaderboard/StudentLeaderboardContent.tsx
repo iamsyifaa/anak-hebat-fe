@@ -34,9 +34,15 @@ function StudentLeaderboardContent({ data, scope, onScopeChange }: Props) {
   return (
     <div className="space-y-4">
       <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#3474EC] to-[#1854C9] p-4 text-white shadow-[0_12px_30px_rgba(31,90,210,0.2)] sm:p-6">
-        <p className="text-sm font-black uppercase tracking-[0.12em] text-[#BBD1FF]">Papan Peringkat</p>
-        <h2 className="mt-1 text-xl font-black sm:text-3xl">Rangkings Siswa Berprestasi</h2>
-        <p className="text-sm text-white/65">Peringkat dihitung berdasarkan akumulasi Poin mingguan.</p>
+        <p className="text-sm font-black uppercase tracking-[0.12em] text-[#BBD1FF]">
+          Papan Peringkat
+        </p>
+        <h2 className="mt-1 text-xl font-black sm:text-3xl">
+          Rangkings Siswa Berprestasi
+        </h2>
+        <p className="text-sm text-white/65">
+          Peringkat dihitung berdasarkan akumulasi Poin mingguan.
+        </p>
 
         <div className="mt-4 flex justify-end gap-2">
           {(["class", "grade"] as const).map((value) => (
@@ -45,7 +51,9 @@ function StudentLeaderboardContent({ data, scope, onScopeChange }: Props) {
               type="button"
               onClick={() => onScopeChange(value)}
               className={`rounded-full px-3 py-1 text-sm font-black ${
-                scope === value ? "bg-white text-[#2F6FED]" : "bg-white/20 text-white"
+                scope === value
+                  ? "bg-white text-[#2F6FED]"
+                  : "bg-white/20 text-white"
               }`}
             >
               {value === "class" ? "Kelas V-B" : "Angkatan 2026"}
@@ -75,7 +83,9 @@ function StudentLeaderboardContent({ data, scope, onScopeChange }: Props) {
             <LeaderboardRow key={entry.studentId} entry={entry} />
           ))}
           {rest.length === 0 && (
-            <p className="py-6 text-center text-sm font-semibold text-slate-400">Siswa tidak ditemukan.</p>
+            <p className="py-6 text-center text-sm font-semibold text-slate-400">
+              Siswa tidak ditemukan.
+            </p>
           )}
         </div>
       </section>

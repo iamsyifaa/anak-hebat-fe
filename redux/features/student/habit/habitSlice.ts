@@ -92,7 +92,8 @@ export const submitHabit = createAsyncThunk<
 
     return {
       success: true,
-      message: "Data tersimpan di perangkat. Sinkronisasi menunggu API Backend.",
+      message:
+        "Data tersimpan di perangkat. Sinkronisasi menunggu API Backend.",
       completedAt: pending.created_at,
       pointsAwarded: 0,
       expAwarded: 0,

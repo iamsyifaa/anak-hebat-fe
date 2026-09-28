@@ -13,7 +13,9 @@ function PillTabSwitcher({ options, activeValue, onChange }: Props) {
   return (
     <div
       className="grid gap-1.5 rounded-2xl bg-[#EEF5FF] p-1.5"
-      style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
+      style={{
+        gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))`,
+      }}
     >
       {options.map((option) => {
         const isActive = option.value === activeValue;

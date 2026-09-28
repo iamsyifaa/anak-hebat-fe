@@ -9,8 +9,9 @@ export default function OfflinePage() {
         </div>
         <h1 className="mt-5 text-2xl font-black">Koneksi sedang offline</h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Halaman aplikasi yang sudah tersimpan tetap bisa dibuka. Data kebiasaan yang
-          kamu simpan saat offline akan tetap berada di perangkat dengan status pending.
+          Halaman aplikasi yang sudah tersimpan tetap bisa dibuka. Data
+          kebiasaan yang kamu simpan saat offline akan tetap berada di perangkat
+          dengan status pending.
         </p>
         <Link
           href="/dashboard/student"

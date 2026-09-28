@@ -42,9 +42,13 @@ function StudentHomeContent({ data }: Props) {
               height={54}
               className="h-12 w-12 object-contain"
             />
-            <p className="mt-1 text-sm font-bold text-[#3B65C9]">PENGUATAN POSITIF</p>
+            <p className="mt-1 text-sm font-bold text-[#3B65C9]">
+              PENGUATAN POSITIF
+            </p>
             <p className="mt-1 text-base font-black">Kamu hebat hari ini!</p>
-            <p className="mt-0.5 max-w-md text-sm text-slate-500">{data.positiveMessage}</p>
+            <p className="mt-0.5 max-w-md text-sm text-slate-500">
+              {data.positiveMessage}
+            </p>
           </div>
         </div>
       </section>
@@ -55,9 +59,14 @@ function StudentHomeContent({ data }: Props) {
             <p className="text-sm font-black uppercase tracking-wide text-[#2F6FED]">
               {formatIndonesianDate()}
             </p>
-            <h2 className="mt-1 text-xl font-black sm:text-2xl">Isi Kebiasaanmu</h2>
+            <h2 className="mt-1 text-xl font-black sm:text-2xl">
+              Isi Kebiasaanmu
+            </h2>
           </div>
-          <Link href="/dashboard/student/recap" className="shrink-0 text-sm font-bold text-[#2F6FED]">
+          <Link
+            href="/dashboard/student/recap"
+            className="shrink-0 text-sm font-bold text-[#2F6FED]"
+          >
             Lihat rekap
           </Link>
         </div>

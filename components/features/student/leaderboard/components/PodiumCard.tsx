@@ -60,7 +60,9 @@ function PodiumCard({ entry }: Props) {
             <span className="block text-[9px] uppercase tracking-[0.12em] text-slate-400 sm:text-[10px]">
               Level
             </span>
-            <span className="mt-0.5 block text-[11px] sm:text-xs">{entry.level}</span>
+            <span className="mt-0.5 block text-[11px] sm:text-xs">
+              {entry.level}
+            </span>
           </div>
         </div>
       </div>

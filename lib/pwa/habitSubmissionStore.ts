@@ -43,8 +43,10 @@ export const getPendingHabitSubmissions = async (
       );
       resolve(result);
     };
-    request.onerror = () => reject(request.error ?? new Error("Gagal membaca data offline."));
-    transaction.onerror = () => reject(transaction.error ?? new Error("Gagal membaca data offline."));
+    request.onerror = () =>
+      reject(request.error ?? new Error("Gagal membaca data offline."));
+    transaction.onerror = () =>
+      reject(transaction.error ?? new Error("Gagal membaca data offline."));
   });
 };
 
@@ -85,8 +87,10 @@ export const savePendingHabitSubmission = async ({
     const transaction = database.transaction(SUBMISSION_STORE, "readwrite");
     transaction.objectStore(SUBMISSION_STORE).put(submission);
     transaction.oncomplete = () => resolve();
-    transaction.onerror = () => reject(transaction.error ?? new Error("Gagal menyimpan data offline."));
-    transaction.onabort = () => reject(transaction.error ?? new Error("Gagal menyimpan data offline."));
+    transaction.onerror = () =>
+      reject(transaction.error ?? new Error("Gagal menyimpan data offline."));
+    transaction.onabort = () =>
+      reject(transaction.error ?? new Error("Gagal menyimpan data offline."));
   });
 
   notifyUpdated();

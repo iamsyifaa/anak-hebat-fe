@@ -38,7 +38,9 @@ const saveCacheEntry = async <T>(key: string, value: T) => {
   });
 };
 
-const getCacheEntry = async <T>(key: string): Promise<CachedValue<T> | null> => {
+const getCacheEntry = async <T>(
+  key: string,
+): Promise<CachedValue<T> | null> => {
   const database = await openDatabase();
 
   return new Promise((resolve, reject) => {
@@ -59,7 +61,8 @@ export const cacheStudentDashboard = (data: StudentDashboardResponse) =>
   saveCacheEntry("student-dashboard", data);
 
 export const getCachedStudentDashboard = async () => {
-  const cached = await getCacheEntry<StudentDashboardResponse>("student-dashboard");
+  const cached =
+    await getCacheEntry<StudentDashboardResponse>("student-dashboard");
   if (!cached) return null;
   if (cached.dateKey === getLocalDateKey()) return cached.value;
 
@@ -76,7 +79,9 @@ export const cacheHabitForm = (habitId: HabitId, data: HabitFormResponse) =>
   saveCacheEntry(`habit-form:${habitId}`, data);
 
 export const getCachedHabitForm = async (habitId: HabitId) => {
-  const cached = await getCacheEntry<HabitFormResponse>(`habit-form:${habitId}`);
+  const cached = await getCacheEntry<HabitFormResponse>(
+    `habit-form:${habitId}`,
+  );
   if (!cached) return null;
   if (cached.dateKey === getLocalDateKey()) return cached.value;
 

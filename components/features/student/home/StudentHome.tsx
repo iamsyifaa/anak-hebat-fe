@@ -9,7 +9,9 @@ import { fetchStudentDashboard } from "@/redux/features/student/home/homeSlice";
 
 function StudentHome() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, loading, error } = useSelector((state: RootState) => state.studentHome);
+  const { data, loading, error } = useSelector(
+    (state: RootState) => state.studentHome,
+  );
 
   useEffect(() => {
     if (!data) void dispatch(fetchStudentDashboard());
@@ -23,7 +25,9 @@ function StudentHome() {
         </div>
       )}
       {error && !data && (
-        <div className="rounded-2xl bg-white p-6 text-base font-bold text-red-600">{error}</div>
+        <div className="rounded-2xl bg-white p-6 text-base font-bold text-red-600">
+          {error}
+        </div>
       )}
       {data && <StudentHomeContent data={data} />}
     </StudentDashboardShell>

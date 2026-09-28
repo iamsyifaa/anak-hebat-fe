@@ -6,7 +6,16 @@ import studentRecap from "./features/student/recap/recapSlice";
 import studentLeaderboard from "./features/student/leaderboard/leaderboardSlice";
 import studentProfile from "./features/student/profile/profileSlice";
 
-const store = configureStore({ reducer: { auth, studentHome, studentHabit, studentRecap, studentLeaderboard, studentProfile } });
+const store = configureStore({
+  reducer: {
+    auth,
+    studentHome,
+    studentHabit,
+    studentRecap,
+    studentLeaderboard,
+    studentProfile,
+  },
+});
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export default store;

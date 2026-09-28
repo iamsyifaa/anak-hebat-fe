@@ -4,7 +4,10 @@ import { SyntheticEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HiOutlineSparkles } from "react-icons/hi2";
 import { AppDispatch, RootState } from "@/redux/store";
-import { clearAuthMessage, loginWithPassword } from "@/redux/features/auth/authSlice";
+import {
+  clearAuthMessage,
+  loginWithPassword,
+} from "@/redux/features/auth/authSlice";
 import { useRedirectAfterLogin } from "@/hook/useRedirectAfterLogin";
 import TextField from "@/components/ui/Input/TextField";
 import PasswordField from "@/components/ui/Input/PasswordField";
@@ -33,16 +36,27 @@ function StudentPasswordLoginForm() {
 
     const result = await dispatch(loginWithPassword({ formData }));
 
-    if (loginWithPassword.fulfilled.match(result) && result.payload.code === 200) {
+    if (
+      loginWithPassword.fulfilled.match(result) &&
+      result.payload.code === 200
+    ) {
       redirectAfterLogin(result.payload.access_token, result.payload.data.role);
     }
   };
 
   return (
     <>
-      {error && <ErrorAlert message={error} onClose={() => dispatch(clearAuthMessage())} />}
+      {error && (
+        <ErrorAlert
+          message={error}
+          onClose={() => dispatch(clearAuthMessage())}
+        />
+      )}
 
-      <form onSubmit={handleSubmit} className="mt-2.5 space-y-2.5 sm:mt-4 sm:space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-2.5 space-y-2.5 sm:mt-4 sm:space-y-4"
+      >
         <TextField
           id="student-username"
           name="username"

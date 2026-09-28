@@ -54,7 +54,10 @@ export const fetchStudentDashboard = createAsyncThunk(
       if (!isNetworkFailure) throw error;
 
       const cached = await getCachedStudentDashboard();
-      if (!cached) throw new Error("Dashboard belum tersedia secara offline. Buka dashboard saat online terlebih dahulu.");
+      if (!cached)
+        throw new Error(
+          "Dashboard belum tersedia secara offline. Buka dashboard saat online terlebih dahulu.",
+        );
       return mergePendingSubmissions(cached);
     }
   },

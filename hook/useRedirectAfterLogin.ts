@@ -17,6 +17,6 @@ export function useRedirectAfterLogin() {
       localStorage.setItem("access_token", accessToken);
       router.push(getDashboardPathByRole(role));
     },
-    [router]
+    [router],
   );
 }

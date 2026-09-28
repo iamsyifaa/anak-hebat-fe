@@ -13,7 +13,9 @@ function QrLoginPanel() {
   const [showScanner, setShowScanner] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { user, code, loading, accessToken } = useSelector((state: RootState) => state.auth);
+  const { user, code, loading, accessToken } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   const handleScan = useCallback(
     async (qrToken: string) => {
@@ -29,7 +31,7 @@ function QrLoginPanel() {
       // Modal tetap terbuka & akan menampilkan pesan "QR tidak valid" secara mandiri.
       throw new Error("QR login failed");
     },
-    [dispatch, router]
+    [dispatch, router],
   );
 
   return (
@@ -40,7 +42,9 @@ function QrLoginPanel() {
           aria-hidden="true"
         />
         <div className="text-center">
-          <p className="text-base font-black text-[#232852] sm:text-lg">Masuk dengan QR Siswa</p>
+          <p className="text-base font-black text-[#232852] sm:text-lg">
+            Masuk dengan QR Siswa
+          </p>
           <p className="mt-1 text-xs font-semibold leading-5 text-[#232852]/60 sm:text-sm">
             Arahkan kamera ke QR yang diberikan sekolah.
           </p>
@@ -70,7 +74,10 @@ function QrLoginPanel() {
       )}
 
       {showScanner && (
-        <StudentQrScannerModal onScan={handleScan} onClose={() => setShowScanner(false)} />
+        <StudentQrScannerModal
+          onScan={handleScan}
+          onClose={() => setShowScanner(false)}
+        />
       )}
     </>
   );

@@ -25,7 +25,9 @@ const TAB_DESCRIPTION: Record<LoginMethod, string> = {
 function LoginCard() {
   const [method, setMethod] = useState<LoginMethod>("qr");
   const dispatch = useDispatch<AppDispatch>();
-  const { error, code, loading } = useSelector((state: RootState) => state.auth);
+  const { error, code, loading } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   return (
     <div className="relative z-10 w-full max-w-lg rounded-[2.5rem] border border-white/80 bg-white p-5 shadow-[0_24px_70px_rgba(164,193,253,0.45)] sm:p-8 md:p-9">
@@ -37,7 +39,6 @@ function LoginCard() {
         <h1 className="mt-4 text-2xl font-black tracking-tight text-[#232852] sm:text-3xl">
           anaktumbuh.id
         </h1>
-        <p className="mt-1 text-sm font-semibold text-[#232852]/65 sm:text-base">Akses Siswa</p>
         <p className="mx-auto mt-2 max-w-xs text-xs font-semibold leading-5 text-[#232852]/55 sm:max-w-sm sm:text-sm">
           {TAB_DESCRIPTION[method]}
         </p>
@@ -55,7 +56,10 @@ function LoginCard() {
       </div>
 
       {error && !loading && (
-        <ErrorAlert message={error} onClose={() => dispatch(clearAuthMessage())} />
+        <ErrorAlert
+          message={error}
+          onClose={() => dispatch(clearAuthMessage())}
+        />
       )}
       {code === 400 && !error && !loading && (
         <ErrorAlert

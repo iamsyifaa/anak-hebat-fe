@@ -6,7 +6,13 @@ interface Props {
   onClick?: () => void;
 }
 
-function PrimaryButton({ label, type = "button", disabled, loading, onClick }: Props) {
+function PrimaryButton({
+  label,
+  type = "button",
+  disabled,
+  loading,
+  onClick,
+}: Props) {
   return (
     <button
       type={type}

@@ -11,7 +11,9 @@ function StudentMobileNav() {
     <nav className="fixed inset-x-3 bottom-3 z-50 flex items-center justify-around rounded-2xl border border-white/80 bg-white/95 p-2 shadow-[0_10px_35px_rgba(23,32,78,0.12)] backdrop-blur lg:hidden">
       {NAV_ITEMS.map((item) => {
         const Icon = item.icon;
-        const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+        const active = item.exact
+          ? pathname === item.href
+          : pathname.startsWith(item.href);
 
         return (
           <Link

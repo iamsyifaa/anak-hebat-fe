@@ -16,7 +16,9 @@ interface UseQrScannerResult {
 // Owns the full html5-qrcode camera lifecycle (start, decode callback,
 // retry-after-error, and cleanup) so StudentQrScannerModal only has to
 // render markup and doesn't need to know how the scanner library works.
-export function useQrScanner({ onScan }: UseQrScannerOptions): UseQrScannerResult {
+export function useQrScanner({
+  onScan,
+}: UseQrScannerOptions): UseQrScannerResult {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const processingRef = useRef(false);
   const mountedRef = useRef(false);
@@ -43,7 +45,8 @@ export function useQrScanner({ onScan }: UseQrScannerOptions): UseQrScannerResul
       }
     };
     window.addEventListener("unhandledrejection", handleRejection);
-    return () => window.removeEventListener("unhandledrejection", handleRejection);
+    return () =>
+      window.removeEventListener("unhandledrejection", handleRejection);
   }, []);
 
   useEffect(() => {
@@ -91,7 +94,10 @@ export function useQrScanner({ onScan }: UseQrScannerOptions): UseQrScannerResul
             fps: 10,
             qrbox: (viewfinderWidth, viewfinderHeight) => {
               const shortestSide = Math.min(viewfinderWidth, viewfinderHeight);
-              const size = Math.max(170, Math.min(280, Math.floor(shortestSide * 0.68)));
+              const size = Math.max(
+                170,
+                Math.min(280, Math.floor(shortestSide * 0.68)),
+              );
               return { width: size, height: size };
             },
             aspectRatio: 1,
@@ -128,7 +134,7 @@ export function useQrScanner({ onScan }: UseQrScannerOptions): UseQrScannerResul
           },
           () => {
             // QR belum terbaca, callback ini dipanggil berkala oleh html5-qrcode.
-          }
+          },
         );
 
         scannerStarted = true;
@@ -140,7 +146,9 @@ export function useQrScanner({ onScan }: UseQrScannerOptions): UseQrScannerResul
         if (cancelled || !mountedRef.current) return;
 
         console.error("Camera error:", err);
-        setError("Tidak dapat mengakses kamera. Silakan izinkan akses kamera pada browser.");
+        setError(
+          "Tidak dapat mengakses kamera. Silakan izinkan akses kamera pada browser.",
+        );
       }
     };
 

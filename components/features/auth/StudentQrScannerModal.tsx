@@ -20,7 +20,9 @@ function StudentQrScannerModal({ onScan, onClose }: Props) {
           <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#EEB541]/25 text-[#3A72E3]">
             <HiOutlineQrCode className="h-5 w-5" aria-hidden="true" />
           </div>
-          <h2 className="text-2xl font-black text-[#232852] sm:text-3xl">Scan QR Siswa</h2>
+          <h2 className="text-2xl font-black text-[#232852] sm:text-3xl">
+            Scan QR Siswa
+          </h2>
           <p className="mt-1 text-sm font-semibold text-[#232852]/55 sm:text-base">
             Arahkan kamera ke QR siswa
           </p>
@@ -36,7 +38,9 @@ function StudentQrScannerModal({ onScan, onClose }: Props) {
 
         {isProcessing && (
           <div className="mt-4 rounded-2xl bg-[#A4C1FD]/25 p-3 text-center">
-            <p className="text-base font-bold text-[#232852]">QR terbaca. Memverifikasi...</p>
+            <p className="text-base font-bold text-[#232852]">
+              QR terbaca. Memverifikasi...
+            </p>
           </div>
         )}
 
@@ -47,7 +51,11 @@ function StudentQrScannerModal({ onScan, onClose }: Props) {
         )}
 
         <div className="mt-4">
-          <OutlineButton label="Batal" onClick={onClose} disabled={isProcessing} />
+          <OutlineButton
+            label="Batal"
+            onClick={onClose}
+            disabled={isProcessing}
+          />
         </div>
       </div>
     </div>

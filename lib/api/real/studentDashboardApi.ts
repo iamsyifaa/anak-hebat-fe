@@ -1,6 +1,10 @@
 import { envConfig } from "@/lib/config/envConfig";
 import { StudentDashboardApi } from "@/lib/api/contracts/studentDashboardApi";
-import { HabitId, LeaderboardScope, SubmitHabitRequest } from "@/lib/types/studentDashboard";
+import {
+  HabitId,
+  LeaderboardScope,
+  SubmitHabitRequest,
+} from "@/lib/types/studentDashboard";
 
 // Endpoint dependency: Laravel student dashboard/read APIs.
 // Replace paths here when the backend contract is finalized; presentation components remain unchanged.
@@ -14,8 +18,12 @@ const ENDPOINTS = {
 } as const;
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  if (!envConfig.apiBaseUrl) throw new Error("NEXT_PUBLIC_API_BASE_URL belum dikonfigurasi.");
-  const accessToken = typeof window !== "undefined" ? window.localStorage.getItem("access_token") : null;
+  if (!envConfig.apiBaseUrl)
+    throw new Error("NEXT_PUBLIC_API_BASE_URL belum dikonfigurasi.");
+  const accessToken =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("access_token")
+      : null;
   const response = await fetch(`${envConfig.apiBaseUrl}${path}`, {
     ...init,
     headers: {
@@ -33,14 +41,24 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export const realStudentDashboardApi: StudentDashboardApi = {
   getDashboard: () => request(ENDPOINTS.dashboard),
   getHabitForm: async (habitId) => {
-    const raw = await request<Record<string, unknown>>(ENDPOINTS.habit(habitId));
+    const raw = await request<Record<string, unknown>>(
+      ENDPOINTS.habit(habitId),
+    );
     // Backend Laravel mengirim field ini dengan nama `panduan_teks` (diisi
     // wali kelas lewat Rich Text Editor). Dipetakan ke `guideHtml` di sini
     // supaya komponen presentasi cuma kenal satu nama field yang konsisten.
     return { ...raw, guideHtml: raw.panduan_teks ?? raw.guideHtml } as never;
   },
-  submitHabit: (payload: SubmitHabitRequest) => request(ENDPOINTS.submitHabit(payload.habitId), { method: "POST", body: JSON.stringify({ values: payload.values }) }),
-  getRecap: (dateKey) => request(`${ENDPOINTS.recap}${dateKey ? `?date=${encodeURIComponent(dateKey)}` : ""}`),
-  getLeaderboard: (scope: LeaderboardScope = "class") => request(`${ENDPOINTS.leaderboard}?scope=${scope}`),
+  submitHabit: (payload: SubmitHabitRequest) =>
+    request(ENDPOINTS.submitHabit(payload.habitId), {
+      method: "POST",
+      body: JSON.stringify({ values: payload.values }),
+    }),
+  getRecap: (dateKey) =>
+    request(
+      `${ENDPOINTS.recap}${dateKey ? `?date=${encodeURIComponent(dateKey)}` : ""}`,
+    ),
+  getLeaderboard: (scope: LeaderboardScope = "class") =>
+    request(`${ENDPOINTS.leaderboard}?scope=${scope}`),
   getProfile: () => request(ENDPOINTS.profile),
 };

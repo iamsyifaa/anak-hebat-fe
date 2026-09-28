@@ -21,14 +21,19 @@ function StudentDashboardHeader({ mode, displayName, avatar }: Props) {
       >
         {mode === "greeting" && (
           <div>
-            <h1 className="text-xl font-black sm:text-3xl">Halo, {displayName}!</h1>
+            <h1 className="text-xl font-black sm:text-3xl">
+              Halo, {displayName}!
+            </h1>
             <p className="mt-0.5 hidden text-sm font-medium text-slate-500 sm:block">
               Silahkan isi 7 Kebiasaan Anak Indonesia Hebat hari ini.
             </p>
           </div>
         )}
 
-        <Link href="/dashboard/student/profile" className="flex items-center gap-2">
+        <Link
+          href="/dashboard/student/profile"
+          className="flex items-center gap-2"
+        >
           <div className="hidden text-right sm:block">
             <p className="text-sm font-black">{displayName}</p>
             <p className="text-sm font-medium text-slate-400">Siswa Kelas B1</p>

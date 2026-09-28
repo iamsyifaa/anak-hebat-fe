@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { Sparkles } from "lucide-react";
 import { AppDispatch, RootState } from "@/redux/store";
-import { clearAuthMessage, loginWithPassword } from "@/redux/features/auth/authSlice";
+import {
+  clearAuthMessage,
+  loginWithPassword,
+} from "@/redux/features/auth/authSlice";
 import { getDashboardPathByRole } from "@/lib/utils/roleRedirect";
 import TextField from "@/components/ui/Input/TextField";
 import PasswordField from "@/components/ui/Input/PasswordField";
@@ -27,7 +30,10 @@ function PasswordLoginPanel() {
 
     const result = await dispatch(loginWithPassword({ formData }));
 
-    if (loginWithPassword.fulfilled.match(result) && result.payload.code === 200) {
+    if (
+      loginWithPassword.fulfilled.match(result) &&
+      result.payload.code === 200
+    ) {
       localStorage.setItem("access_token", result.payload.access_token);
       router.push(getDashboardPathByRole(result.payload.data.role));
     }

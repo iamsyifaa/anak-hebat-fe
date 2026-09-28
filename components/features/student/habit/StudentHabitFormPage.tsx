@@ -29,9 +29,8 @@ function StudentHabitFormPage({ habitId }: Props) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const typedHabitId = habitId as HabitId;
-  const { data, values, loading, submitting, error, submitResult } = useSelector(
-    (state: RootState) => state.studentHabit,
-  );
+  const { data, values, loading, submitting, error, submitResult } =
+    useSelector((state: RootState) => state.studentHabit);
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,9 @@ function StudentHabitFormPage({ habitId }: Props) {
   const handleSubmit = async () => {
     if (!canSubmit || submitting) return;
 
-    const result = await dispatch(submitHabit({ habitId: typedHabitId, values }));
+    const result = await dispatch(
+      submitHabit({ habitId: typedHabitId, values }),
+    );
     if (submitHabit.fulfilled.match(result) && result.payload.success) {
       await dispatch(fetchStudentDashboard());
       setShowSuccess(true);
@@ -93,18 +94,23 @@ function StudentHabitFormPage({ habitId }: Props) {
                   priority
                 />
               </div>
-              <h1 className="text-2xl font-black sm:text-3xl">{data.habit.title}</h1>
+              <h1 className="text-2xl font-black sm:text-3xl">
+                {data.habit.title}
+              </h1>
               <p className="mx-auto mt-1 max-w-md text-sm leading-4 text-slate-500">
                 {data.habit.description}
               </p>
-              <HabitGuideButton habitTitle={data.habit.title} guideHtml={data.guideHtml} />
+              <HabitGuideButton
+                habitTitle={data.habit.title}
+                guideHtml={data.guideHtml}
+              />
             </div>
 
             <div className="mt-4">
               <InfoNotice>
-                Isi dengan jujur dan sesuai keadaan sebenarnya. Jawaban digunakan sebagai
-                catatan perkembangan kebiasaanmu. Jangan memilih jawaban hanya supaya
-                mendapatkan poin yang lebih tinggi.
+                Isi dengan jujur dan sesuai keadaan sebenarnya. Jawaban
+                digunakan sebagai catatan perkembangan kebiasaanmu. Jangan
+                memilih jawaban hanya supaya mendapatkan poin yang lebih tinggi.
               </InfoNotice>
             </div>
 
@@ -121,7 +127,8 @@ function StudentHabitFormPage({ habitId }: Props) {
 
             {data.locked ? (
               <div className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-3 py-3 text-sm font-black text-emerald-700">
-                <HiOutlineLockClosed className="h-4 w-4" /> Kebiasaan ini sudah tercatat dan dikunci.
+                <HiOutlineLockClosed className="h-4 w-4" /> Kebiasaan ini sudah
+                tercatat dan dikunci.
               </div>
             ) : (
               <div className="mt-6">

@@ -14,4 +14,5 @@ export const formatIndonesianDate = (dateKey?: string): string => {
   }).format(date);
 };
 
-export const toDateInputValue = (date = new Date()): string => getLocalDateKey(date);
+export const toDateInputValue = (date = new Date()): string =>
+  getLocalDateKey(date);

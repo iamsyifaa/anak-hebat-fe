@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { HiOutlineEye, HiOutlineEyeSlash, HiOutlineLockClosed } from "react-icons/hi2";
+import {
+  HiOutlineEye,
+  HiOutlineEyeSlash,
+  HiOutlineLockClosed,
+} from "react-icons/hi2";
 
 interface Props {
   id: string;
@@ -13,7 +17,15 @@ interface Props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function PasswordField({ id, name, label, placeholder, value, autoComplete, onChange }: Props) {
+function PasswordField({
+  id,
+  name,
+  label,
+  placeholder,
+  value,
+  autoComplete,
+  onChange,
+}: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -46,7 +58,11 @@ function PasswordField({ id, name, label, placeholder, value, autoComplete, onCh
           aria-label={visible ? "Sembunyikan password" : "Tampilkan password"}
           className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xl p-1.5 text-slate-400 transition hover:bg-[#A4C1FD]/15 hover:text-[#3A72E3] focus:outline-none focus:ring-2 focus:ring-[#3A72E3]/20 sm:right-2 sm:p-2"
         >
-          {visible ? <HiOutlineEyeSlash className="h-4 w-4 sm:h-5 sm:w-5" /> : <HiOutlineEye className="h-4 w-4 sm:h-5 sm:w-5" />}
+          {visible ? (
+            <HiOutlineEyeSlash className="h-4 w-4 sm:h-5 sm:w-5" />
+          ) : (
+            <HiOutlineEye className="h-4 w-4 sm:h-5 sm:w-5" />
+          )}
         </button>
       </div>
     </div>

@@ -19,14 +19,19 @@ export const openDatabase = (): Promise<IDBDatabase> => {
   databasePromise = new Promise((resolve, reject) => {
     const request = window.indexedDB.open(DB_NAME, DB_VERSION);
 
-    request.onerror = () => reject(request.error ?? new Error("Gagal membuka IndexedDB."));
+    request.onerror = () =>
+      reject(request.error ?? new Error("Gagal membuka IndexedDB."));
 
     request.onupgradeneeded = () => {
       const database = request.result;
 
       if (!database.objectStoreNames.contains(SUBMISSION_STORE)) {
-        const store = database.createObjectStore(SUBMISSION_STORE, { keyPath: "id" });
-        store.createIndex("by_habit_date", ["habit_id", "tanggal"], { unique: false });
+        const store = database.createObjectStore(SUBMISSION_STORE, {
+          keyPath: "id",
+        });
+        store.createIndex("by_habit_date", ["habit_id", "tanggal"], {
+          unique: false,
+        });
         store.createIndex("by_date", "tanggal", { unique: false });
         store.createIndex("by_status", "status", { unique: false });
       }

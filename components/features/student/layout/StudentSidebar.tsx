@@ -3,13 +3,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HiHome, HiOutlineBookOpen, HiOutlineChartBar, HiOutlineUser } from "react-icons/hi2";
+import {
+  HiHome,
+  HiOutlineBookOpen,
+  HiOutlineChartBar,
+  HiOutlineUser,
+} from "react-icons/hi2";
 
 export const NAV_ITEMS = [
   { href: "/dashboard/student", label: "Beranda", icon: HiHome, exact: true },
-  { href: "/dashboard/student/recap", label: "Rekap", icon: HiOutlineBookOpen, exact: false },
-  { href: "/dashboard/student/leaderboard", label: "Papan Juara", icon: HiOutlineChartBar, exact: false },
-  { href: "/dashboard/student/profile", label: "Profil", icon: HiOutlineUser, exact: false },
+  {
+    href: "/dashboard/student/recap",
+    label: "Rekap",
+    icon: HiOutlineBookOpen,
+    exact: false,
+  },
+  {
+    href: "/dashboard/student/leaderboard",
+    label: "Papan Juara",
+    icon: HiOutlineChartBar,
+    exact: false,
+  },
+  {
+    href: "/dashboard/student/profile",
+    label: "Profil",
+    icon: HiOutlineUser,
+    exact: false,
+  },
 ] as const;
 
 function StudentSidebar() {
@@ -24,7 +44,8 @@ function StudentSidebar() {
         href="/dashboard/student"
         className="mb-8 px-3 text-xl font-black tracking-tight"
       >
-        anak<span className="text-[#2F6FED]">tumbuh</span><span className="text-[#F5BE3B]">.id</span>
+        anak<span className="text-[#2F6FED]">tumbuh</span>
+        <span className="text-[#F5BE3B]">.id</span>
       </Link>
 
       <p className="px-3 text-sm font-bold uppercase tracking-[0.14em] text-white/45">

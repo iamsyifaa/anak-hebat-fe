@@ -23,7 +23,8 @@ function HabitField({ field, value, locked }: Props) {
     <div>
       <div className="mb-2">
         <p className="text-sm font-black text-[#17204E]">
-          {field.label} {!field.optional && <span className="text-red-500">*</span>}
+          {field.label}{" "}
+          {!field.optional && <span className="text-red-500">*</span>}
         </p>
         {field.helper && (
           <p className="mt-0.5 text-sm text-slate-400">{field.helper}</p>

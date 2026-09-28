@@ -8,7 +8,11 @@ import StudentPasswordLoginForm from "./StudentPasswordLoginForm";
 
 type LoginMethod = "qr" | "password";
 
-const TABS: { key: LoginMethod; label: string; icon: typeof HiOutlineQrCode }[] = [
+const TABS: {
+  key: LoginMethod;
+  label: string;
+  icon: typeof HiOutlineQrCode;
+}[] = [
   { key: "qr", label: "Scan QR", icon: HiOutlineQrCode },
   { key: "password", label: "Password", icon: HiOutlineKey },
 ];
@@ -43,7 +47,10 @@ function StudentLoginTabs() {
                   : "text-[#232852]/50 hover:text-[#232852]"
               }`}
             >
-              <Icon className="h-3 w-3 shrink-0 sm:h-4 sm:w-4" aria-hidden="true" />
+              <Icon
+                className="h-3 w-3 shrink-0 sm:h-4 sm:w-4"
+                aria-hidden="true"
+              />
               <span className="truncate">{tab.label}</span>
             </button>
           );
