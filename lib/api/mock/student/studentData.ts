@@ -1,4 +1,5 @@
 import type { StudentDashboardResponse } from "@/lib/types/studentDashboard";
+import { HABIT_PRESENTATION } from "@/lib/constants/habitPresentation";
 
 export const student = {
   id: "student-001",
@@ -16,83 +17,4 @@ export const student = {
   weeklyPoints: [250, 280, 220, 310, 260, 300, 0],
 };
 
-export const habits: StudentDashboardResponse["habits"] = [
-  {
-    id: "wake-up",
-    order: 1,
-    title: "Bangun Pagi",
-    shortTitle: "Bangun Pagi",
-    description: "Kebiasaan bangun pagi, dihitung dari waktu adzan subuh.",
-    imageUrl: "/assets/student/wake-up.png",
-    completed: false,
-    pointsAwarded: 15,
-    accent: "bg-[#FFF8E8]",
-  },
-  {
-    id: "prayer",
-    order: 2,
-    title: "Beribadah",
-    shortTitle: "Beribadah",
-    description: "Kebiasaan menjalankan ibadah sesuai target.",
-    imageUrl: "/assets/student/prayer.png",
-    completed: false,
-    pointsAwarded: 20,
-    accent: "bg-[#EDF9F2]",
-  },
-  {
-    id: "sports",
-    order: 3,
-    title: "Berolahraga",
-    shortTitle: "Berolahraga",
-    description: "Kebiasaan melakukan aktivitas olahraga.",
-    imageUrl: "/assets/student/sports.png",
-    completed: false,
-    pointsAwarded: 20,
-    accent: "bg-[#EEF6FF]",
-  },
-  {
-    id: "healthy-food",
-    order: 4,
-    title: "Makan Sehat dan Bergizi",
-    shortTitle: "Makan Sehat & Bergizi",
-    description: "Kebiasaan menjaga makan sehat dan bergizi.",
-    imageUrl: "/assets/student/healthy-food.png",
-    completed: false,
-    pointsAwarded: 20,
-    accent: "bg-[#FFF5E8]",
-  },
-  {
-    id: "reading",
-    order: 5,
-    title: "Gemar Belajar",
-    shortTitle: "Gemar Belajar",
-    description: "Kebiasaan belajar secara aktif untuk bekal masa depan.",
-    imageUrl: "/assets/student/reading.png",
-    completed: false,
-    pointsAwarded: 20,
-    accent: "bg-[#F8F0FF]",
-  },
-  {
-    id: "community",
-    order: 6,
-    title: "Bermasyarakat",
-    shortTitle: "Bermasyarakat",
-    description:
-      "Kebiasaan melakukan kegiatan yang membantu lingkungan/masyarakat.",
-    imageUrl: "/assets/student/community.png",
-    completed: false,
-    pointsAwarded: 20,
-    accent: "bg-[#FFF0F3]",
-  },
-  {
-    id: "early-sleep",
-    order: 7,
-    title: "Tidur Cepat",
-    shortTitle: "Tidur Cepat",
-    description: "Kebiasaan menjaga waktu tidur.",
-    imageUrl: "/assets/student/early-sleep.png",
-    completed: false,
-    pointsAwarded: 15,
-    accent: "bg-[#EDF8F8]",
-  },
-];
+export const habits: StudentDashboardResponse["habits"] = HABIT_PRESENTATION;

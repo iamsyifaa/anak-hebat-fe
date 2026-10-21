@@ -1,8 +1,8 @@
 "use client";
 
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import { AppDispatch } from "@/redux/store";
+import { clearAccessToken } from "@/lib/api/client";
 import { resetAuth } from "@/redux/features/auth/authSlice";
 import OutlineButton from "@/components/ui/Button/OutlineButton";
 import PrimaryButton from "@/components/ui/Button/PrimaryButton";
@@ -13,12 +13,13 @@ interface Props {
 
 function LogoutModal({ onClose }: Props) {
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
 
   const handleConfirm = () => {
-    localStorage.removeItem("access_token");
+    clearAccessToken();
     dispatch(resetAuth());
-    router.replace("/");
+    // Navigasi penuh (bukan router.replace) agar seluruh state Redux berisi
+    // data siswa sebelumnya ikut hilang dan tidak terbaca siswa berikutnya.
+    window.location.replace("/");
   };
 
   return (

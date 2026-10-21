@@ -22,6 +22,7 @@ import ErrorAlert from "@/components/ui/Alert/ErrorAlert";
 function StudentPasswordLoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [coolingDown, setCoolingDown] = useState(false);
   const redirectAfterLogin = useRedirectAfterLogin();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.auth);
@@ -30,17 +31,24 @@ function StudentPasswordLoginForm() {
     event.preventDefault();
     dispatch(clearAuthMessage());
 
-    const formData = new FormData();
-    formData.append("username", username.trim());
-    formData.append("password", password);
+    // Kolom "Username" di layar berisi NISN siswa; backend menerimanya
+    // sebagai field `nisn`.
+    const result = await dispatch(
+      loginWithPassword({ nisn: username.trim(), password }),
+    );
 
-    const result = await dispatch(loginWithPassword({ formData }));
+    if (loginWithPassword.fulfilled.match(result)) {
+      redirectAfterLogin(result.payload.accessToken, result.payload.user.role);
+      return;
+    }
 
+    // 429 (rate limit): jangan retry otomatis; tahan tombol sebentar.
     if (
-      loginWithPassword.fulfilled.match(result) &&
-      result.payload.code === 200
+      loginWithPassword.rejected.match(result) &&
+      result.error.code === "rate_limit_exceeded"
     ) {
-      redirectAfterLogin(result.payload.access_token, result.payload.data.role);
+      setCoolingDown(true);
+      setTimeout(() => setCoolingDown(false), 30_000);
     }
   };
 
@@ -85,11 +93,17 @@ function StudentPasswordLoginForm() {
 
         <button
           type="submit"
-          disabled={loading || !username.trim() || !password}
+          disabled={loading || coolingDown || !username.trim() || !password}
           className="group w-full rounded-xl border-b-4 border-[#232852] bg-[#3A72E3] py-2.5 text-sm font-black text-white shadow-lg shadow-[#3A72E3]/40 transition-all hover:scale-[1.02] hover:bg-[#3268D5] active:scale-95 active:translate-y-1 active:border-b-0 active:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 sm:rounded-2xl sm:py-4 sm:text-lg"
         >
           <span className="inline-flex items-center justify-center gap-2">
-            <span>{loading ? "Memverifikasi..." : "Masuk ke Dashboard"}</span>
+            <span>
+              {loading
+                ? "Memverifikasi..."
+                : coolingDown
+                  ? "Tunggu sebentar..."
+                  : "Masuk ke Dashboard"}
+            </span>
             {!loading && (
               <HiOutlineSparkles
                 className="h-4 w-4 transition-transform group-hover:rotate-12"

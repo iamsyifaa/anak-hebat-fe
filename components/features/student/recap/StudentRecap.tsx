@@ -9,6 +9,7 @@ import {
   setSelectedDate,
 } from "@/redux/features/student/recap/recapSlice";
 import { AppDispatch, RootState } from "@/redux/store";
+import { getLocalDateKey } from "@/lib/utils/date";
 
 function StudentRecapContent() {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +28,7 @@ function StudentRecapContent() {
   };
 
   const resetDate = () => {
-    const fallback = "2026-08-26";
+    const fallback = getLocalDateKey();
     setDraftDate(fallback);
     dispatch(setSelectedDate(fallback));
     dispatch(fetchRecap(fallback));

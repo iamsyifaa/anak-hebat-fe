@@ -19,19 +19,19 @@ function StudentQrLoginPanel() {
   const [showScanner, setShowScanner] = useState(false);
   const redirectAfterLogin = useRedirectAfterLogin();
   const dispatch = useDispatch<AppDispatch>();
-  const { user, code, error, loading, accessToken } = useSelector(
+  const { user, error, loading, accessToken } = useSelector(
     (state: RootState) => state.auth,
   );
 
   const handleScan = useCallback(
-    async (qrToken: string) => {
-      const result = await dispatch(loginWithQr({ qrToken }));
+    async (qrPayload: string) => {
+      const result = await dispatch(loginWithQr({ qrPayload }));
 
-      if (loginWithQr.fulfilled.match(result) && result.payload.code === 200) {
+      if (loginWithQr.fulfilled.match(result)) {
         setShowScanner(false);
         redirectAfterLogin(
-          result.payload.access_token,
-          result.payload.data.role,
+          result.payload.accessToken,
+          result.payload.user.role,
         );
         return;
       }
@@ -47,12 +47,6 @@ function StudentQrLoginPanel() {
       {error && !loading && (
         <ErrorAlert
           message={error}
-          onClose={() => dispatch(clearAuthMessage())}
-        />
-      )}
-      {code === 400 && !error && !loading && (
-        <ErrorAlert
-          message="Kode QR tidak valid atau sudah tidak aktif."
           onClose={() => dispatch(clearAuthMessage())}
         />
       )}
@@ -94,7 +88,7 @@ function StudentQrLoginPanel() {
         </button>
       </div>
 
-      {user && code === 200 && accessToken && (
+      {user && accessToken && (
         <p className="mt-2.5 text-center text-sm font-semibold text-[#232852]/50 sm:mt-4 sm:text-sm">
           Berhasil masuk, mengalihkan ke dashboard...
         </p>

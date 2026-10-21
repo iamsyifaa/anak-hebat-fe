@@ -2,6 +2,7 @@
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { saveAccessToken } from "@/lib/api/client";
 import { UserRole } from "@/lib/types/authType";
 import { getDashboardPathByRole } from "@/lib/utils/roleRedirect";
 
@@ -14,7 +15,7 @@ export function useRedirectAfterLogin() {
 
   return useCallback(
     (accessToken: string, role: UserRole) => {
-      localStorage.setItem("access_token", accessToken);
+      saveAccessToken(accessToken);
       router.push(getDashboardPathByRole(role));
     },
     [router],

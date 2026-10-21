@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import StudentDashboardShell from "@/components/features/student/layout/StudentDashboardShell";
 import InfoNotice from "@/components/ui/feedback/InfoNotice";
+import ErrorAlert from "@/components/ui/Alert/ErrorAlert";
 import PrimaryButton from "@/components/ui/Button/PrimaryButton";
 import SuccessModal from "@/components/ui/Modal/SuccessModal";
 import HabitGuideButton from "./HabitGuideButton";
@@ -124,6 +125,8 @@ function StudentHabitFormPage({ habitId }: Props) {
                 />
               ))}
             </div>
+
+            {error && <ErrorAlert message={error} />}
 
             {data.locked ? (
               <div className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-3 py-3 text-sm font-black text-emerald-700">

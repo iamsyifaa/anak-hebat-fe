@@ -2,8 +2,8 @@ import type { HabitFormField, HabitId } from "@/lib/types/studentDashboard";
 
 // Indikator kebiasaan mengikuti dokumen menu Guru Wali Kelas (versi terbaru):
 // setiap kebiasaan punya 4 tingkat indikator + 1 pilihan inisiatif.
-// Untuk Berolahraga & Bermasyarakat, inisiatif bersifat opsional karena
-// tidak perlu diisi jika siswa tidak melakukan kegiatan sama sekali.
+// Inisiatif WAJIB untuk semua kebiasaan: backend menolak entri tanpa
+// `initiative` (422). Siswa yang kegiatannya minim memilih indikator terendah.
 const noteField: HabitFormField = {
   id: "note",
   label: "CATATAN PENGALAMAN & CERITA (OPSIONAL)",
@@ -66,8 +66,14 @@ export const fieldsByHabit: Record<HabitId, HabitFormField[]> = {
   prayer: buildFields({
     indicatorId: "completion",
     indicatorLabel: "1. PELAKSANAAN IBADAH",
-    indicatorHelper: "Seberapa banyak ibadah yang kamu laksanakan dibanding target?",
-    options: ["Di atas target", "Sesuai target", "Sebagian besar", "Sebagian kecil"],
+    indicatorHelper:
+      "Seberapa banyak ibadah yang kamu laksanakan dibanding target?",
+    options: [
+      "Di atas target",
+      "Sesuai target",
+      "Sebagian besar",
+      "Sebagian kecil",
+    ],
     initiativeHelper:
       "Jika sebagian besar ibadahmu tidak perlu disuruh, pilih Sadar sendiri.",
     initiativeOptions: ["Sadar sendiri", "Disuruh"],
@@ -76,7 +82,12 @@ export const fieldsByHabit: Record<HabitId, HabitFormField[]> = {
     indicatorId: "completion",
     indicatorLabel: "1. PELAKSANAAN BELAJAR",
     indicatorHelper: "Seberapa banyak kegiatan belajarmu dibanding target?",
-    options: ["Di atas target", "Sesuai target", "Sebagian besar", "Sebagian kecil"],
+    options: [
+      "Di atas target",
+      "Sesuai target",
+      "Sebagian besar",
+      "Sebagian kecil",
+    ],
     initiativeHelper:
       "Jika sebagian besar kegiatan belajarmu tidak perlu disuruh, pilih Sadar sendiri.",
     initiativeOptions: ["Sadar sendiri", "Disuruh"],
@@ -84,7 +95,8 @@ export const fieldsByHabit: Record<HabitId, HabitFormField[]> = {
   "healthy-food": buildFields({
     indicatorId: "meal_quality",
     indicatorLabel: "1. MENJAGA MAKAN SEHAT BERGIZI",
-    indicatorHelper: "Seberapa kamu menjaga makanan sehat dan bergizi hari ini?",
+    indicatorHelper:
+      "Seberapa kamu menjaga makanan sehat dan bergizi hari ini?",
     options: ["Sangat dijaga", "Dijaga", "Kurang dijaga", "Tidak dijaga"],
     initiativeHelper: "Kamu menjaga makanmu sendiri atau harus disuruh?",
     initiativeOptions: ["Sadar sendiri", "Disuruh"],
@@ -94,10 +106,8 @@ export const fieldsByHabit: Record<HabitId, HabitFormField[]> = {
     indicatorLabel: "1. WAKTU OLAHRAGA",
     indicatorHelper: "Seberapa cukup waktu olahragamu hari ini?",
     options: ["Waktu maksimal", "Waktu optimal", "Waktu cukup", "Waktu kurang"],
-    initiativeHelper:
-      "Kosongkan jika kamu tidak berolahraga sama sekali hari ini.",
+    initiativeHelper: "Kamu berolahraga atas kemauan sendiri atau disuruh?",
     initiativeOptions: ["Mandiri", "Disuruh"],
-    initiativeOptional: true,
   }),
   community: buildFields({
     indicatorId: "activity",
@@ -105,16 +115,13 @@ export const fieldsByHabit: Record<HabitId, HabitFormField[]> = {
     indicatorHelper:
       "Seberapa aktif kamu bermasyarakat (keluarga, teman, dan lingkungan)?",
     options: ["Sangat aktif", "Aktif", "Cukup aktif", "Kurang aktif"],
-    initiativeHelper:
-      "Kosongkan jika kamu tidak bermasyarakat sama sekali hari ini.",
+    initiativeHelper: "Kamu bermasyarakat atas kemauan sendiri atau disuruh?",
     initiativeOptions: ["Mandiri", "Disuruh"],
-    initiativeOptional: true,
   }),
   "early-sleep": buildFields({
     indicatorId: "sleep_time",
     indicatorLabel: "1. WAKTU TIDUR",
-    indicatorHelper:
-      "Pilih sesuai waktu setempat di kotamu (WIB/WITA/WIT).",
+    indicatorHelper: "Pilih sesuai waktu setempat di kotamu (WIB/WITA/WIT).",
     options: [
       "Di bawah pukul 20.00",
       "Pukul 20.00–21.00",

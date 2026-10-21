@@ -1,40 +1,55 @@
-import { loginWithPasswordApi, loginWithQrApi } from "@/lib/api/authApi";
-import { AuthApiResponse, AuthenticatedUser } from "@/lib/types/authType";
+import {
+  fetchCurrentUserApi,
+  loginWithPasswordApi,
+  loginWithQrApi,
+} from "@/lib/api/authApi";
+import { getAccessToken } from "@/lib/api/client";
+import type {
+  AuthenticatedUser,
+  AuthResult,
+  StudentPasswordLoginPayload,
+} from "@/lib/types/authType";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   user: AuthenticatedUser | null;
   accessToken: string;
-  code: number;
-  message: string | null;
   loading: boolean;
+  restoring: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
   accessToken: "",
-  code: 0,
-  message: null,
   loading: false,
+  restoring: false,
   error: null,
 };
 
+// Gagal login = thunk rejected (ApiError dilempar dari lib/api/client),
+// jadi tidak ada lagi pengecekan response.code di komponen.
 export const loginWithPassword = createAsyncThunk<
-  AuthApiResponse,
-  { formData: FormData }
->("auth/loginWithPassword", async ({ formData }) => {
-  const response = await loginWithPasswordApi(formData);
-  return response;
-});
+  AuthResult,
+  StudentPasswordLoginPayload
+>("auth/loginWithPassword", (payload) => loginWithPasswordApi(payload));
 
-export const loginWithQr = createAsyncThunk<
-  AuthApiResponse,
-  { qrToken: string }
->("auth/loginWithQr", async ({ qrToken }) => {
-  const response = await loginWithQrApi(qrToken);
-  return response;
-});
+export const loginWithQr = createAsyncThunk<AuthResult, { qrPayload: string }>(
+  "auth/loginWithQr",
+  ({ qrPayload }) => loginWithQrApi(qrPayload),
+);
+
+// Redux tidak bertahan saat halaman di-refresh, sedangkan token ada di
+// localStorage. Data user dipulihkan lewat GET /auth/me.
+export const restoreSession = createAsyncThunk<AuthResult>(
+  "auth/restoreSession",
+  async () => {
+    const accessToken = getAccessToken();
+    if (!accessToken) throw new Error("Belum login.");
+    const user = await fetchCurrentUserApi(accessToken);
+    return { accessToken, user };
+  },
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -43,70 +58,53 @@ const authSlice = createSlice({
     resetAuth: (state) => {
       state.user = null;
       state.accessToken = "";
-      state.code = 0;
-      state.message = null;
       state.loading = false;
+      state.restoring = false;
       state.error = null;
     },
     clearAuthMessage: (state) => {
-      state.code = 0;
-      state.message = null;
       state.error = null;
     },
   },
   extraReducers: (builder) => {
+    const onPending = (state: AuthState) => {
+      state.loading = true;
+      state.error = null;
+    };
+    const onFulfilled = (state: AuthState, action: PayloadAction<AuthResult>) => {
+      state.loading = false;
+      state.error = null;
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+    };
+
     builder
-      .addCase(loginWithPassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        loginWithPassword.fulfilled,
-        (state, action: PayloadAction<AuthApiResponse>) => {
-          state.loading = false;
-          state.code = action.payload.code;
-          state.message = action.payload.message;
-          if (action.payload.code === 200) {
-            state.error = null;
-            state.user = action.payload.data;
-            state.accessToken = action.payload.access_token;
-          } else {
-            state.error =
-              action.payload.message || "Username atau password salah.";
-            state.user = null;
-            state.accessToken = "";
-          }
-        },
-      )
+      .addCase(loginWithPassword.pending, onPending)
+      .addCase(loginWithPassword.fulfilled, onFulfilled)
       .addCase(loginWithPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Gagal melakukan login";
+        state.user = null;
+        state.accessToken = "";
+        state.error = action.error.message || "Username atau password salah.";
       })
-
-      .addCase(loginWithQr.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        loginWithQr.fulfilled,
-        (state, action: PayloadAction<AuthApiResponse>) => {
-          state.loading = false;
-          state.code = action.payload.code;
-          state.message = action.payload.message;
-          if (action.payload.code === 200) {
-            state.error = null;
-            state.user = action.payload.data;
-            state.accessToken = action.payload.access_token;
-          } else {
-            state.error = action.payload.message || "QR Code tidak valid.";
-            state.user = null;
-            state.accessToken = "";
-          }
-        },
-      )
+      .addCase(loginWithQr.pending, onPending)
+      .addCase(loginWithQr.fulfilled, onFulfilled)
       .addCase(loginWithQr.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "QR Code tidak valid";
+        state.user = null;
+        state.accessToken = "";
+        state.error = action.error.message || "QR Code tidak valid.";
+      })
+      .addCase(restoreSession.pending, (state) => {
+        state.restoring = true;
+      })
+      .addCase(restoreSession.fulfilled, (state, action) => {
+        state.restoring = false;
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+      })
+      .addCase(restoreSession.rejected, (state) => {
+        state.restoring = false;
       });
   },
 });

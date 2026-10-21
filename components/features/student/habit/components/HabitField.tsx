@@ -19,6 +19,25 @@ function HabitField({ field, value, locked }: Props) {
     dispatch(setHabitValue({ fieldId: field.id, value: nextValue }));
   };
 
+  // Kebiasaan yang membolehkan beberapa indikator (allows_multi_select)
+  // menyimpan pilihannya sebagai array JSON di dalam satu nilai string.
+  const selectedMulti: string[] = (() => {
+    if (field.kind !== "multichoice" || !value) return [];
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.map(String) : [];
+    } catch {
+      return [];
+    }
+  })();
+
+  const toggleMulti = (option: string) => {
+    const next = selectedMulti.includes(option)
+      ? selectedMulti.filter((item) => item !== option)
+      : [...selectedMulti, option];
+    updateValue(next.length ? JSON.stringify(next) : "");
+  };
+
   return (
     <div>
       <div className="mb-2">
@@ -42,6 +61,20 @@ function HabitField({ field, value, locked }: Props) {
               onClick={() =>
                 updateValue(field.optional && value === option ? "" : option)
               }
+            />
+          ))}
+        </div>
+      )}
+
+      {field.kind === "multichoice" && field.options && (
+        <div className="space-y-2">
+          {field.options.map((option) => (
+            <OptionButton
+              key={option}
+              label={option}
+              selected={selectedMulti.includes(option)}
+              disabled={locked}
+              onClick={() => toggleMulti(option)}
             />
           ))}
         </div>

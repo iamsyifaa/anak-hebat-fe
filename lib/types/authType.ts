@@ -2,30 +2,29 @@
 // (Super Admin, Headmaster, Teacher, Student).
 export type UserRole = "super_admin" | "headmaster" | "teacher" | "student";
 
+// Login hanya mengembalikan id, role, name. Sisanya (sekolah, nisn, rombel,
+// foto) diisi dari GET /auth/me dan bisa kosong.
 export interface AuthenticatedUser {
   id: string;
   name: string;
-  username: string;
   role: UserRole;
+  username?: string;
+  nisn?: string;
+  nip?: string;
+  gender?: string;
   schoolId?: string;
-  classGroupId?: string;
+  schoolName?: string;
+  rombelId?: string;
+  rombelName?: string;
   avatarUrl?: string;
 }
 
-export interface PasswordLoginPayload {
-  username: string;
+export interface StudentPasswordLoginPayload {
+  nisn: string;
   password: string;
 }
 
 export interface AuthResult {
   accessToken: string;
   user: AuthenticatedUser;
-}
-
-export interface AuthApiResponse {
-  code: number;
-  status: string;
-  message: string;
-  data: AuthenticatedUser;
-  access_token: string;
 }

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { studentDashboardApi } from "@/lib/api/studentDashboardApi";
 import { RecapResponse } from "@/lib/types/studentDashboard";
+import { getLocalDateKey } from "@/lib/utils/date";
 
 interface State {
   data: RecapResponse | null;
@@ -12,7 +13,7 @@ const initialState: State = {
   data: null,
   loading: false,
   error: null,
-  selectedDate: "2026-08-26",
+  selectedDate: getLocalDateKey(),
 };
 export const fetchRecap = createAsyncThunk(
   "studentRecap/fetch",
@@ -26,7 +27,7 @@ const recapSlice = createSlice({
     setSelectedDate: (state, action: PayloadAction<string>) => {
       state.selectedDate = action.payload;
     },
-    resetRecap: () => initialState,
+    resetRecap: () => ({ ...initialState, selectedDate: getLocalDateKey() }),
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRecap.pending, (state) => {

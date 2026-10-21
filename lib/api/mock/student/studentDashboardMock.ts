@@ -1,13 +1,20 @@
 import { HABIT_GUIDE_HTML } from "./habitGuideMock";
 import { habits, student } from "./studentData";
-import { fieldsByHabit } from "./habitForms";
+import { fieldsByHabit } from "@/lib/constants/habitFormFields";
 import { recapItems } from "./recaps";
 import { classLeaderboard, gradeLeaderboard } from "./leaderboards";
-import type { HabitId, SubmitHabitRequest, SubmitHabitResponse } from "@/lib/types/studentDashboard";
+import type {
+  HabitId,
+  SubmitHabitRequest,
+  SubmitHabitResponse,
+} from "@/lib/types/studentDashboard";
 import type { StudentDashboardApi } from "@/lib/api/contracts/studentDashboardApi";
 import { formatIndonesianDate, getLocalDateKey } from "@/lib/utils/date";
 
-const submissionsByDate = new Map<string, Map<HabitId, Record<string, string>>>();
+const submissionsByDate = new Map<
+  string,
+  Map<HabitId, Record<string, string>>
+>();
 
 const getSubmissionsForDate = (dateKey: string) => {
   const existing = submissionsByDate.get(dateKey);

@@ -44,7 +44,7 @@ export interface StudentDashboardResponse {
   habits: HabitSummary[];
 }
 
-export type FormFieldKind = "choice" | "textarea";
+export type FormFieldKind = "choice" | "multichoice" | "textarea";
 
 export interface HabitFormField {
   id: string;
