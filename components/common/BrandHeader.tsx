@@ -4,7 +4,7 @@ interface Props {
   subtitle?: string;
 }
 
-// Reused wherever the "anaktumbuh.id" brand mark appears — currently the
+// Reused wherever the "anakhebat.id" brand mark appears — currently the
 // login card, later also the dashboard navbar/splash once those exist.
 function BrandHeader({ subtitle = "Akses Siswa" }: Props) {
   return (
@@ -17,7 +17,7 @@ function BrandHeader({ subtitle = "Akses Siswa" }: Props) {
       </div>
 
       <h1 className="mt-2.5 text-xl font-black tracking-tight text-[#232852] sm:mt-4 sm:text-3xl">
-        anaktumbuh.id
+        anakhebat.id
       </h1>
       <p className="mt-0.5 text-sm font-semibold text-[#232852]/65 sm:mt-1 sm:text-lg">
         {subtitle}

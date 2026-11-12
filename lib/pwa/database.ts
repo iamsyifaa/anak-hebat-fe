@@ -1,8 +1,8 @@
-export const DB_NAME = "anaktumbuh-pwa";
+export const DB_NAME = "anakhebat-pwa";
 export const DB_VERSION = 2;
 export const SUBMISSION_STORE = "habitSubmissions";
 export const CACHE_STORE = "appCache";
-export const UPDATED_EVENT = "anaktumbuh:offline-db-updated";
+export const UPDATED_EVENT = "anakhebat:offline-db-updated";
 
 let databasePromise: Promise<IDBDatabase> | null = null;
 

@@ -3,7 +3,7 @@ import AuthBackdrop from "@/components/ui/Background/AuthBackdrop";
 import StudentLoginTabs from "@/components/features/auth/StudentLoginTabs";
 
 export const metadata: Metadata = {
-  title: "Masuk Siswa | anaktumbuh.id",
+  title: "Masuk Siswa | anakhebat.id",
   description: "Login siswa menggunakan scan QR atau username & password.",
 };
 

@@ -44,7 +44,7 @@ function StudentSidebar() {
         href="/dashboard/student"
         className="mb-8 px-3 text-xl font-black tracking-tight"
       >
-        anak<span className="text-[#2F6FED]">tumbuh</span>
+        anak<span className="text-[#2F6FED]">hebat</span>
         <span className="text-[#F5BE3B]">.id</span>
       </Link>
 
@@ -92,7 +92,7 @@ function StudentSidebar() {
         </div>
 
         <p className="mt-2 text-center text-xs text-white/25">
-          © 2026 anaktumbuh.id — Semua hak dilindungi
+          © 2026 anakhebat.id — Semua hak dilindungi
         </p>
       </div>
     </aside>

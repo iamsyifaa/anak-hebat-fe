@@ -1,4 +1,4 @@
-// Role resmi mengikuti Dokumen Requirement ANAKTUMBUH v2 bagian 2
+// Role resmi mengikuti Dokumen Requirement ANAKHEBAT v2 bagian 2
 // (Super Admin, Headmaster, Teacher, Student).
 export type UserRole = "super_admin" | "headmaster" | "teacher" | "student";
 
