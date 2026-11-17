@@ -103,7 +103,7 @@ function StudentHabitFormPage({ habitId }: Props) {
               </p>
               <HabitGuideButton
                 habitTitle={data.habit.title}
-                guideHtml={data.guideHtml}
+                guideText={data.guideText}
               />
             </div>
 

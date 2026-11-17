@@ -61,7 +61,6 @@ interface CatalogHabit {
   isExclusive: boolean;
   allowsMultiSelect: boolean;
   indicators: CatalogIndicator[];
-  guideHtml?: string;
 }
 
 const CATALOG_TTL_MS = 5 * 60 * 1000;
@@ -94,9 +93,30 @@ const mapCatalogHabit = (raw: Rec): CatalogHabit | null => {
     indicators,
     // Belum dikirim backend (lihat daftar tugas backend #1). Begitu ada,
     // field ini otomatis tampil sebagai tombol "Panduan Pengisian".
-    guideHtml: toStr(pick(raw, "panduan_teks", "guide_html")) || undefined,
   };
 };
+
+// Panduan per rombel (teks polos). Opsional: kegagalan apa pun (termasuk 401
+// ditangani apiRequest) tidak boleh menghalangi pengisian form.
+async function getRombelGuides(): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  try {
+    const user = await fetchCurrentUserApi();
+    if (!user.rombelId) return result;
+    const { data } = await apiRequest<unknown>(
+      `/rombels/${user.rombelId}/habit-guides`,
+    );
+    toList(data).forEach((row) => {
+      const rec = asRec(row);
+      const id = toStr(pick(rec, "habit_id"));
+      const content = toStr(pick(rec, "content"));
+      if (id && content) result.set(id, content);
+    });
+  } catch {
+    /* panduan bersifat tambahan */
+  }
+  return result;
+}
 
 const getCatalog = (force = false): Promise<CatalogHabit[]> => {
   const now = Date.now();
@@ -499,12 +519,13 @@ export const realStudentDashboardApi: StudentDashboardApi = {
   },
 
   async getHabitForm(habitId) {
-    const [catalog, entries] = await Promise.all([
+    const [catalog, entries, guides] = await Promise.all([
       getCatalog(),
       getEntriesByDate(getLocalDateKey()).catch((error) => {
         if (error instanceof ApiError && error.status === 401) throw error;
         return [] as Entry[];
       }),
+      getRombelGuides(),
     ]);
     const habit = findHabit(catalog, habitId);
     const staticFields = fieldsByHabit[habitId];
@@ -553,7 +574,7 @@ export const realStudentDashboardApi: StudentDashboardApi = {
       fields,
       locked: Boolean(today),
       submittedValue,
-      guideHtml: habit.guideHtml,
+      guideText: guides.get(habit.id) || undefined,
     };
   },
 

@@ -84,9 +84,10 @@ export const mapMeUser = (raw: unknown): AuthenticatedUser => {
     rombelId: toStr(pick(me, "rombel_id") ?? pick(rombel, "id")) || undefined,
     rombelName:
       toStr(pick(me, "rombel_name") ?? pick(rombel, "name")) || undefined,
-    // `photo` dari backend adalah URL terproteksi (butuh header Authorization)
-    // sehingga TIDAK boleh dipasang langsung di <img>. Sampai INTEG-ME-001
-    // selesai dan pemuatan via fetch -> blob URL dibuat, avatar tetap bawaan.
+    // `photo` adalah URL terproteksi (butuh header Authorization), jadi tidak
+    // boleh dipasang langsung di <img>. Dimuat lewat useProtectedAvatar
+    // (fetch -> blob). Bernilai null bila siswa belum punya foto.
+    photoUrl: toStr(pick(me, "photo") ?? pick(student, "photo")) || undefined,
     avatarUrl: undefined,
   };
 };
