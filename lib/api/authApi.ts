@@ -84,9 +84,10 @@ export const mapMeUser = (raw: unknown): AuthenticatedUser => {
     rombelId: toStr(pick(me, "rombel_id") ?? pick(rombel, "id")) || undefined,
     rombelName:
       toStr(pick(me, "rombel_name") ?? pick(rombel, "name")) || undefined,
-    // `photo` dari backend adalah URL terproteksi (butuh header Authorization)
-    // sehingga TIDAK boleh dipasang langsung di <img>. Sampai INTEG-ME-001
-    // selesai dan pemuatan via fetch -> blob URL dibuat, avatar tetap bawaan.
+    // `photo` adalah URL terproteksi (butuh header Authorization), jadi tidak
+    // boleh dipasang langsung di <img>. Dimuat lewat useProtectedAvatar
+    // (fetch -> blob). Bernilai null bila siswa belum punya foto.
+    photoUrl: toStr(pick(me, "photo") ?? pick(student, "photo")) || undefined,
     avatarUrl: undefined,
   };
 };
@@ -96,7 +97,35 @@ export const fetchCurrentUserApi = async (
   token?: string,
 ): Promise<AuthenticatedUser> => {
   const { data } = await apiRequest<unknown>("/auth/me", { token });
-  return mapMeUser(data);
+  const user = mapMeUser(data);
+  if (user.gender || user.role !== "student") return user;
+  return { ...user, gender: await fetchOwnGender(user.id, token) };
+};
+
+// /auth/me siswa tidak memuat gender. GET /students untuk siswa hanya
+// mengembalikan datanya sendiri, jadi gender diambil dari sana (di-cache per
+// akun supaya tidak memanggil ulang di setiap pemanggilan fetchCurrentUserApi).
+const genderCache = new Map<string, string>();
+
+const fetchOwnGender = async (
+  userId: string,
+  token?: string,
+): Promise<string | undefined> => {
+  const cached = genderCache.get(userId);
+  if (cached) return cached;
+  try {
+    const { data } = await apiRequest<unknown>("/students", {
+      token,
+      query: { per_page: 1 },
+    });
+    const first = asRec(Array.isArray(data) ? data[0] : undefined);
+    const gender = toStr(pick(first, "gender"));
+    if (gender) genderCache.set(userId, gender);
+    return gender || undefined;
+  } catch {
+    // Pelengkap saja: tanpa gender dipakai avatar bawaan.
+    return undefined;
+  }
 };
 
 const finishLogin = async (

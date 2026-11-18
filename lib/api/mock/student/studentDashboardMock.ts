@@ -1,4 +1,4 @@
-import { HABIT_GUIDE_HTML } from "./habitGuideMock";
+import { HABIT_GUIDE_TEXT } from "./habitGuideMock";
 import { habits, student } from "./studentData";
 import { fieldsByHabit } from "@/lib/constants/habitFormFields";
 import { recapItems } from "./recaps";
@@ -53,7 +53,7 @@ export const mockStudentDashboardApi: StudentDashboardApi = {
       fields: fieldsByHabit[habitId],
       locked: submissions.has(habitId),
       submittedValue: submissions.get(habitId),
-      guideHtml: HABIT_GUIDE_HTML[habitId],
+      guideText: HABIT_GUIDE_TEXT[habitId],
     };
   },
 

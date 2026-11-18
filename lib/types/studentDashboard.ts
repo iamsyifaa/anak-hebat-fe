@@ -65,7 +65,7 @@ export interface HabitFormResponse {
   // `panduan_teks`, diisi via Rich Text Editor di dashboard wali kelas).
   // Dirender pakai dangerouslySetInnerHTML — begitu backend siap, tinggal
   // dipetakan dari response asli, tidak perlu hardcode per habit lagi.
-  guideHtml?: string;
+  guideText?: string;
 }
 
 export interface SubmitHabitRequest {

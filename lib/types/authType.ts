@@ -17,6 +17,9 @@ export interface AuthenticatedUser {
   rombelId?: string;
   rombelName?: string;
   avatarUrl?: string;
+  // URL foto terproteksi dari backend (null/kosong = belum ada foto).
+  // Jangan dipasang di <img>; ambil lewat useProtectedAvatar.
+  photoUrl?: string;
 }
 
 export interface StudentPasswordLoginPayload {

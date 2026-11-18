@@ -86,6 +86,7 @@ const fallbackMessage = (status: number) => {
   if (status === 429)
     return "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.";
   if (status === 409) return "Data bentrok dengan data yang sudah ada.";
+  if (status === 413) return "Berkas terlalu besar. Maksimal 4 MB.";
   if (status === 422) return "Data yang dikirim tidak valid.";
   if (status >= 500) return "Server sedang bermasalah. Coba lagi nanti.";
   return "Request API gagal.";
@@ -101,6 +102,10 @@ interface RequestOptions {
   // bukan sesi habis.
   redirectOn401?: boolean;
 }
+
+// Cold start server uji bisa 4-6 detik (kadang lebih), jadi batas waktu
+// minimal 15 detik. Dipakai 20 detik.
+export const REQUEST_TIMEOUT_MS = 20_000;
 
 export async function apiRequest<T>(
   path: string,
@@ -126,15 +131,33 @@ export async function apiRequest<T>(
   const accessToken = token ?? getAccessToken();
   // Kegagalan jaringan sengaja dibiarkan sebagai TypeError dari fetch —
   // alur offline (PWA) mengandalkan itu untuk mendeteksi "sedang offline".
-  const response = await fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json",
-      ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  let response: Response;
+  try {
+    // Tanpa cookie: autentikasi hanya lewat header Authorization (jangan pakai
+    // credentials: "include").
+    response = await fetch(url, {
+      method,
+      headers: {
+        Accept: "application/json",
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError")
+      throw new ApiError(
+        0,
+        "request_timeout",
+        "Server belum merespons. Coba lagi sebentar lagi.",
+      );
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
 
   // Body bisa kosong atau bukan JSON (mis. 204, atau error dari proxy).
   const raw = await response.text();
@@ -184,3 +207,28 @@ export const getErrorMessage = (
   error: unknown,
   fallback = "Terjadi kesalahan.",
 ) => (error instanceof Error && error.message ? error.message : fallback);
+
+// Foto terproteksi: <img src> tidak membawa Authorization, jadi ambil lewat
+// fetch lalu ubah menjadi blob URL. Panggil URL.revokeObjectURL saat tidak
+// dipakai lagi. Mengembalikan null jika gagal (pakai avatar bawaan).
+export async function fetchProtectedImage(photoUrl: string): Promise<string | null> {
+  const token = getAccessToken();
+  if (!token || !photoUrl) return null;
+  const url = /^https?:/i.test(photoUrl)
+    ? photoUrl
+    : `${envConfig.apiBaseUrl}${photoUrl.replace(/^\/api\/v1/, "")}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    });
+    if (!response.ok) return null;
+    return URL.createObjectURL(await response.blob());
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}

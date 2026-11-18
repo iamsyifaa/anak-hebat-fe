@@ -1,5 +1,7 @@
 "use client";
 
+import { useProtectedAvatar } from "@/hook/useProtectedAvatar";
+import { avatarByGender } from "@/lib/api/authApi";
 import { useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +23,10 @@ function StudentDashboardShell({ children, headerMode = "greeting" }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.auth.user);
   const displayName = user?.name ?? "Siswa";
-  const avatar = user?.avatarUrl ?? "/assets/student/girl-avatar.png";
+  const avatar = useProtectedAvatar(
+    user?.photoUrl,
+    avatarByGender(user?.gender, user?.avatarUrl),
+  );
 
   // Guard sesi (hanya saat memakai backend asli): tanpa token kembali ke
   // login; setelah refresh, data user dipulihkan dari GET /auth/me.

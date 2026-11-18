@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
+import { useProtectedAvatar } from "@/hook/useProtectedAvatar";
 import StudentDashboardShell from "@/components/features/student/layout/StudentDashboardShell";
 import LogoutModal from "@/components/ui/Modal/LogoutModal";
 import { fetchProfile } from "@/redux/features/student/profile/profileSlice";
@@ -15,6 +16,11 @@ function StudentProfileContent() {
     (state: RootState) => state.studentProfile,
   );
   const [openLogout, setOpenLogout] = useState(false);
+  const authUser = useSelector((state: RootState) => state.auth.user);
+  const avatarSrc = useProtectedAvatar(
+    authUser?.photoUrl,
+    data?.student.avatarUrl ?? "/assets/student/girl-avatar.png",
+  );
   useEffect(() => {
     if (!data) dispatch(fetchProfile());
   }, [dispatch, data]);
@@ -55,7 +61,7 @@ function StudentProfileContent() {
       <div className="w-full max-w-[860px] rounded-3xl bg-white p-5 shadow-[0_12px_40px_rgba(23,32,78,0.05)] sm:p-8 lg:bg-transparent lg:p-0 lg:shadow-none">
         <div className="text-center">
           <Image
-            src={student.avatarUrl}
+            src={avatarSrc}
             alt={student.name}
             width={110}
             height={110}

@@ -1,12 +1,21 @@
 import { HabitId } from "@/lib/types/studentDashboard";
 
-// Konten dummy — meniru hasil isian wali kelas lewat Rich Text Editor di
-// dashboard mereka (field backend: panduan_teks). Begitu backend siap,
-// file ini tidak lagi dipakai; StudentHabitFormPage tinggal merender
-// guideHtml yang datang dari response API asli.
+// Konten dummy — meniru panduan teks polos yang ditulis wali kelas
+// (GET /rombels/{id}/habit-guides, field content). Hanya dipakai saat mock API.
 //
 // Isi panduan mengikuti indikator terbaru dari menu Guru Wali Kelas.
-export const HABIT_GUIDE_HTML: Record<HabitId, string> = {
+const stripHtml = (html: string) =>
+  html
+    .replace(/<\/(p|h4|li)>/g, "\n")
+    .replace(/<li>/g, "- ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .split("\n")
+    .map((l) => l.trim())
+    .join("\n")
+    .trim();
+
+const RAW: Record<HabitId, string> = {
   "wake-up": `
     <p>Memulai hari lebih awal melatih kedisiplinan dan memberimu waktu ekstra untuk bersiap tanpa terburu-buru.</p>
     <p><strong>Kenapa dihitung dari adzan subuh?</strong> Waktu subuh tiap daerah berbeda. Adzan subuh di Aceh sekitar pukul 05.20 WIB, sedangkan di Surabaya bisa pukul 04.25 WIB. Karena itu, waktu bangunmu dinilai dari adzan subuh di kotamu, bukan dari jam yang sama untuk semua orang.</p>
@@ -122,3 +131,7 @@ export const HABIT_GUIDE_HTML: Record<HabitId, string> = {
     </ul>
   `,
 };
+
+export const HABIT_GUIDE_TEXT = Object.fromEntries(
+  Object.entries(RAW).map(([k, v]) => [k, stripHtml(v)]),
+) as Record<HabitId, string>;

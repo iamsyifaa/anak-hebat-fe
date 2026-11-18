@@ -5,11 +5,11 @@ import { HiXMark } from "react-icons/hi2";
 
 interface Props {
   habitTitle: string;
-  guideHtml: string;
+  guideText: string;
   onClose: () => void;
 }
 
-function HabitGuideModal({ habitTitle, guideHtml, onClose }: Props) {
+function HabitGuideModal({ habitTitle, guideText, onClose }: Props) {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -50,10 +50,10 @@ function HabitGuideModal({ habitTitle, guideHtml, onClose }: Props) {
           </button>
         </div>
 
-        <div
-          className="guide-content min-h-0 flex-1 overflow-y-auto pr-1 text-[12px] leading-[1.45] text-slate-600 sm:text-sm sm:leading-5"
-          dangerouslySetInnerHTML={{ __html: guideHtml }}
-        />
+        {/* Panduan = teks polos. Jangan dirender sebagai HTML. */}
+        <div className="guide-content min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap pr-1 text-[12px] leading-[1.45] text-slate-600 sm:text-sm sm:leading-5">
+          {guideText}
+        </div>
       </div>
     </div>
   );

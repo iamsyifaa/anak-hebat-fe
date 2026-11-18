@@ -6,13 +6,13 @@ import HabitGuideModal from "./HabitGuideModal";
 
 interface Props {
   habitTitle: string;
-  guideHtml?: string;
+  guideText?: string;
 }
 
-function HabitGuideButton({ habitTitle, guideHtml }: Props) {
+function HabitGuideButton({ habitTitle, guideText }: Props) {
   const [open, setOpen] = useState(false);
 
-  if (!guideHtml) return null;
+  if (!guideText) return null;
 
   return (
     <>
@@ -28,7 +28,7 @@ function HabitGuideButton({ habitTitle, guideHtml }: Props) {
       {open && (
         <HabitGuideModal
           habitTitle={habitTitle}
-          guideHtml={guideHtml}
+          guideText={guideText}
           onClose={() => setOpen(false)}
         />
       )}
